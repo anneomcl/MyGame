@@ -1,6 +1,8 @@
 #pragma once
 #include "SFML/Window.hpp"
 #include "SFML/Graphics.hpp"
+#include "PlayerCharacter.h"
+#include "GameObjectManager.h"
 
 
 class Game
@@ -11,6 +13,10 @@ public:
 	* Starts the game.
 	*/
 	static void start();
+	static sf::RenderWindow& getWindow();
+	const static sf::Event& GetInput();
+	const static int SCREEN_WIDTH = 1024;
+	const static int SCREEN_HEIGHT = 768;
 
 private:
 
@@ -44,4 +50,5 @@ private:
 
 	static GameState _gameState;
 	static sf::RenderWindow _mainWindow;
+	static GameObjectManager _gameObjectManager;
 };

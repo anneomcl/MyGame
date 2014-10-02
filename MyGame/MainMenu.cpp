@@ -8,7 +8,7 @@
 MainMenu::MenuResult MainMenu::show(sf::RenderWindow& window)
 {
 	sf::Texture image;
-	image.loadFromFile("C:/Users/Anne/Documents/Visual Studio 2013/Projects/MyGame/Graphics/menu.png");
+	image.loadFromFile("C:/Users/Anne/Documents/Visual Studio 2013/Projects/MyGame/Graphics/Menu.png");
 	sf::Sprite sprite(image);
 
 	MenuItem playButton;
