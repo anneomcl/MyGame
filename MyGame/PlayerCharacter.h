@@ -14,6 +14,9 @@ public:
 	float getVelocity() const;
 
 private:
-	float _velocity;
+	float _gravity;
+	float _xVelocity;
+	float _yVelocity;
 	float _maxVelocity;
+	bool _grounded;
 };
