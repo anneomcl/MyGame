@@ -1,14 +1,22 @@
 #include "PlayerCharacter.h"
 #include "Game.h"
 #include <assert.h>
+#include <iostream>
+using namespace std;
 
 PlayerCharacter::PlayerCharacter() :
-_xVelocity(0),
-_yVelocity(0),
-_grounded(1),
-_gravity(1),
-_maxVelocity(300.0f)
+position(this->getPosition().x, this->getPosition().y),
+screenStartPosition(this->getPosition().x, this->getPosition().y),
+velocity(0, 0),
+terminalVelocity(2.5f),
+maxVelocity(500.0f),
+gravity(4.0f),
+xAcceleration(1.0f),
+yAcceleration(3.0f),
+jump(0)
 {
+	maxJumpFrames = 250;
+	currJumpFrames = maxJumpFrames;
 	load("C:/Users/Anne/Documents/Visual Studio 2013/Projects/MyGame/Graphics/PlayerCharacterSprite.png");
 	assert(isLoaded());
 	getSprite().setOrigin(getSprite().getGlobalBounds().width / 2, getSprite().getGlobalBounds().height / 2);
@@ -26,53 +34,93 @@ void PlayerCharacter::draw(sf::RenderWindow &rw)
 
 float PlayerCharacter::getVelocity() const
 {
-	return _xVelocity;
+	return velocity.x;
+}
+
+void PlayerCharacter::checkLeft()
+{
+	if (velocity.x > -maxVelocity)
+		velocity.x -= xAcceleration;
+	else if (velocity.x <= maxVelocity)
+		velocity.x = -maxVelocity;
+}
+
+void PlayerCharacter::checkRight()
+{
+	if (velocity.x < maxVelocity)
+		velocity.x += xAcceleration;
+	else if (velocity.x >= maxVelocity)
+		velocity.x = maxVelocity;
+}
+
+void PlayerCharacter::decelerateX()
+{
+	if (velocity.x < 0)
+		velocity.x += xAcceleration;
+	else if (velocity.x > 0)
+		velocity.x -= xAcceleration;
+	else
+		velocity.x = 0;
+}
+
+void PlayerCharacter::updatePosition()
+{
+	position = this->getPosition();
+}
+
+void PlayerCharacter::checkXBounds()
+{
+	if (position.x  < getSprite().getGlobalBounds().width / 2)
+	{
+		velocity.x = -velocity.x;
+	}
+
+	else if (position.x >(Game::SCREEN_WIDTH - (getSprite().getGlobalBounds().width / 2)))
+	{
+		velocity.x = -velocity.x;
+	}
 }
 
 void PlayerCharacter::update(float elapsedTime)
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)
-		|| sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-	{
-		_grounded = false;
-		_yVelocity -= 1.0f;
-		getSprite().move(0, _yVelocity * elapsedTime);
-	}
+	std::cout << "HI" << endl;
+
+	updatePosition();
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+		checkLeft();
+
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+		checkRight();
+
+	else
+		decelerateX();
+
+	checkXBounds();
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) ||
+		sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 	{
-		_xVelocity -= 1.0f;
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-	{
-		_xVelocity += 2.0f;
-	}
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-	{
-		_yVelocity += 2.0f;
-	}
-
-	if (_xVelocity > _maxVelocity)
-		_xVelocity = _maxVelocity;
-
-	if (_xVelocity < -_maxVelocity)
-		_xVelocity = -_maxVelocity;
-
-
-	sf::Vector2f pos = this->getPosition();
-
-	if (pos.x  < getSprite().getGlobalBounds().width / 2
-		|| pos.x >(Game::SCREEN_WIDTH - getSprite().getGlobalBounds().width / 2))
-	{
-		_xVelocity = -_xVelocity; // Bounce by current velocity in opposite direction
+		jump = true;
 	}
 
-	if (pos.y  < getSprite().getGlobalBounds().height / 2
-		|| pos.y >(Game::SCREEN_HEIGHT - getSprite().getGlobalBounds().height / 2))
+	if (currJumpFrames > 0 && jump)
 	{
-		_yVelocity = -_yVelocity;
+		velocity.y -= yAcceleration;
+		currJumpFrames--;
 	}
 
-	getSprite().move(_xVelocity * elapsedTime, _yVelocity * elapsedTime);
+	else if (currJumpFrames == 0 && jump)
+	{
+		velocity.y += gravity;
+		if (position.y > 600)
+		{
+			jump = false;
+			currJumpFrames = maxJumpFrames;
+			velocity.y = 0;
+		}
+			
+	}
+
+	getSprite().move(velocity.x * elapsedTime, velocity.y * elapsedTime);
 }

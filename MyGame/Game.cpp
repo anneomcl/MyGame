@@ -2,6 +2,7 @@
 #include "SplashScreen.h"
 #include "MainMenu.h"
 #include "Background.h"
+#include "RigidSurface.h"
 
 Game::GameState Game::_gameState = Uninitialized;
 sf::RenderWindow Game::_mainWindow;
@@ -15,12 +16,16 @@ void Game::start(void)
 	_mainWindow.create(sf::VideoMode(1024, 768, 32), "Anne McLaughlin Demo");
 
 	PlayerCharacter * player = new PlayerCharacter();
-	player->setPosition(SCREEN_WIDTH/4, 650);
+	player->setPosition(SCREEN_WIDTH/4, 600);
 
 	Background * bg = new Background();
 
+	RigidSurface * block = new RigidSurface();
+	block->setPosition(SCREEN_WIDTH / 2, 600);
+
 	_gameObjectManager.add("Background", bg);
 	_gameObjectManager.add("PlayerCharacter", player);
+	_gameObjectManager.add("block", block);
 	_gameState = Game::ShowingSplash;
 
 	while (!isExiting())
@@ -89,6 +94,13 @@ void Game::gameLoop()
 		{
 			_gameObjectManager.updateAll();
 			_gameObjectManager.drawAll(_mainWindow);
+
+			if (_gameObjectManager.get("block")->getSprite().getGlobalBounds().intersects(_gameObjectManager.get("PlayerCharacter")->getSprite().getGlobalBounds()))
+			{
+				PlayerCharacter * player = (PlayerCharacter *)_gameObjectManager.get("PlayerCharacter");
+				player->velocity.x = -player->velocity.x;
+				player->velocity.y = 0;
+			}
 			_mainWindow.display();
 
 			if (currentEvent.type == sf::Event::Closed) _gameState = Game::Exiting;
