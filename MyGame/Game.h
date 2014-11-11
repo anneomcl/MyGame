@@ -18,7 +18,15 @@ public:
 	const static int SCREEN_WIDTH = 1024;
 	const static int SCREEN_HEIGHT = 768;
 
+	static std::vector<VisibleGameObject *> rigidBodyCoords;
+
 private:
+
+	static void handleSurfaces();
+
+	static void initObject(VisibleGameObject * object, sf::Vector2f position, std::string name);
+
+	static std::vector<VisibleGameObject *> findRigidBodies();
 
 	/*
 	* Handles exiting when _gameState is Exiting.
@@ -45,7 +53,7 @@ private:
 	*/
 	enum GameState {
 		Uninitialized, ShowingSplash, Paused,
-		ShowingMenu, Playing, Exiting
+		ShowingMenu, Playing, Exiting, Restart
 	};
 
 	static GameState _gameState;

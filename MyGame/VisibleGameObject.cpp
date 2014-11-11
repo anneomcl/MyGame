@@ -15,6 +15,11 @@ VisibleGameObject::~VisibleGameObject()
 
 }
 
+char * VisibleGameObject::getType()
+{
+	return "";
+}
+
 void VisibleGameObject::load(std::string filename)
 {
 	if (!_image.loadFromFile(filename))

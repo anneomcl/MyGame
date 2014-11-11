@@ -34,6 +34,24 @@ VisibleGameObject * GameObjectManager::get(std::string name) const
 	return results->second;
 }
 
+std::vector<VisibleGameObject *> GameObjectManager::getByType(const char * type) const
+{
+	std::vector<VisibleGameObject *> ret;
+
+	std::map<std::string, VisibleGameObject *>::const_iterator it = _gameObjects.begin();
+	while (it != _gameObjects.end())
+	{
+		if (strcmp(it->second->getType(),(type)) == 0)
+		{
+			ret.push_back(it->second);
+		}
+
+		it++;
+	}
+	
+	return ret;
+}
+
 int GameObjectManager::getObjectCount() const
 {
 	return _gameObjects.size();

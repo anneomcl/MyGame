@@ -19,7 +19,11 @@ public:
 	void updatePosition();
 	void checkXBounds();
 
+	char * getType();
+
 	sf::Vector2f velocity;
+
+	bool grounded;
 
 private:
 	sf::Vector2f position;

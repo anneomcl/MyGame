@@ -16,6 +16,12 @@ RigidSurface::~RigidSurface()
 
 }
 
+char * RigidSurface::getType()
+{
+	char * type = "RigidSurface";
+	return type;
+}
+
 void RigidSurface::draw(sf::RenderWindow &rw)
 {
 	VisibleGameObject::draw(rw);

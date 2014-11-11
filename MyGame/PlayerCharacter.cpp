@@ -4,6 +4,12 @@
 #include <iostream>
 using namespace std;
 
+char * PlayerCharacter::getType()
+{
+	char * type = "PlayerCharacter";
+	return type;
+}
+
 PlayerCharacter::PlayerCharacter() :
 position(this->getPosition().x, this->getPosition().y),
 screenStartPosition(this->getPosition().x, this->getPosition().y),
@@ -13,7 +19,8 @@ maxVelocity(500.0f),
 gravity(4.0f),
 xAcceleration(1.0f),
 yAcceleration(3.0f),
-jump(0)
+jump(0),
+grounded(1)
 {
 	maxJumpFrames = 250;
 	currJumpFrames = maxJumpFrames;
@@ -83,8 +90,6 @@ void PlayerCharacter::checkXBounds()
 
 void PlayerCharacter::update(float elapsedTime)
 {
-	std::cout << "HI" << endl;
-
 	updatePosition();
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
@@ -102,6 +107,7 @@ void PlayerCharacter::update(float elapsedTime)
 		sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 	{
 		jump = true;
+		grounded = false;
 	}
 
 	if (currJumpFrames > 0 && jump)
@@ -113,13 +119,12 @@ void PlayerCharacter::update(float elapsedTime)
 	else if (currJumpFrames == 0 && jump)
 	{
 		velocity.y += gravity;
-		if (position.y > 600)
+		if (grounded)
 		{
 			jump = false;
 			currJumpFrames = maxJumpFrames;
 			velocity.y = 0;
 		}
-			
 	}
 
 	getSprite().move(velocity.x * elapsedTime, velocity.y * elapsedTime);

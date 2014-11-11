@@ -11,13 +11,14 @@ public:
 	void remove(std::string name);
 	int getObjectCount() const;
 	VisibleGameObject * get(std::string name) const;
+	std::vector<VisibleGameObject *> getByType(const char * type) const;
 
 	void drawAll(sf::RenderWindow &renderWindow);
 	void updateAll();
 
-private:
 	std::map<std::string, VisibleGameObject *> _gameObjects;
 
+private:
 	sf::Clock clock;
 
 	struct GameObjectDeallocator
