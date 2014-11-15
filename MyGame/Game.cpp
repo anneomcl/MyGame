@@ -3,12 +3,21 @@
 #include "MainMenu.h"
 #include "Background.h"
 #include "RigidSurface.h"
+#include "RigidSurface_Floor.h"
+#include "RigidSurface_Mystery.h"
+#include "RigidSurface_Pipe.h"
 #include <iostream>
 
 Game::GameState Game::_gameState = Uninitialized;
 sf::RenderWindow Game::_mainWindow;
 std::vector<VisibleGameObject *> Game::rigidBodyCoords;
 GameObjectManager Game::_gameObjectManager;
+sf::View Game::_view;
+float Game::level_width;
+float Game::level_height;
+sf::Font Game::font;
+sf::Text Game::coins;
+
 
 void Game::initObject(VisibleGameObject * object, sf::Vector2f position, std::string name)
 {
@@ -23,28 +32,28 @@ void Game::start(void)
 		return;
 
 	_mainWindow.create(sf::VideoMode(1024, 768, 32), "Anne McLaughlin Demo");
+	_view.reset(sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
+	_view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
+	//font.loadFromFile("C:/Users/Anne/Documents/Visual Studio 2013/Projects/MyGame/Graphics/gameFont.ttf");
 
-	initObject(new PlayerCharacter, sf::Vector2f(SCREEN_WIDTH / 4, 600), "PlayerCharacter");
+
+	//coins.setFont(Game::font);
+	//coins.setString("Coins: ");
+	//coins.setCharacterSize(24);
+	//coins.setColor(sf::Color::Black);
+	//_mainWindow.draw(coins);
+
+	initObject(new PlayerCharacter, sf::Vector2f(SCREEN_WIDTH / 4, 1000), "PlayerCharacter");
 
 	Background * bg = new Background();
+	level_width = bg->getSprite().getGlobalBounds().width;
+	level_height = bg->getSprite().getGlobalBounds().height;
 
-	RigidSurface * block = new RigidSurface();
-	block->setPosition(SCREEN_WIDTH / 2, 600);
-
-	RigidSurface * block2 = new RigidSurface();
-	block2->setPosition(3*SCREEN_WIDTH / 4, 600);
-
-	RigidSurface * floor1 = new RigidSurface();
-	floor1->setPosition(100, 700);
-
-	RigidSurface * floor2 = new RigidSurface();
-	floor2->setPosition(SCREEN_WIDTH/3, 700);
+	createFloor();
 
 	_gameObjectManager.add("Background", bg);
-	_gameObjectManager.add("block", block);
-	_gameObjectManager.add("block2", block2);
-	_gameObjectManager.add("floor1", floor1);
-	_gameObjectManager.add("floor2", floor2);
+
+	createLevelBlocks();
 
 	rigidBodyCoords = findRigidBodies();
 
@@ -56,6 +65,41 @@ void Game::start(void)
 	}
 
 	_mainWindow.close();
+}
+
+void Game::createLevelBlocks()
+{
+	initObject(new RigidSurface_Mystery, sf::Vector2f(level_width / 4 + 200, 1350 - 500), "block5");
+	for (int i = 0; i < 5; i++)
+	{
+		initObject(new RigidSurface_Mystery, sf::Vector2f(level_width / 4 + 200 + 300 + i * 100, 1350 - 500 - 100), "block" + std::to_string(i));
+	}
+	initObject(new RigidSurface_Mystery, sf::Vector2f(level_width / 4 + 200 + 300 + 300, 1350 - 500 - 300 - 100), "block6");
+
+	initObject(new RigidSurface_Pipe, sf::Vector2f(level_width / 4 + 800 + 400, 1000), "pipe1");
+
+	initObject(new RigidSurface_Pipe, sf::Vector2f(level_width / 4 + 1200 + 600, 1000), "pipe2");
+	initObject(new RigidSurface_Pipe, sf::Vector2f(level_width / 4 + 1200 + 600, 900), "pipe3");
+
+	initObject(new RigidSurface_Pipe, sf::Vector2f(level_width / 4 + 1200 + 600 + 300, 1000), "pipe4");
+	initObject(new RigidSurface_Pipe, sf::Vector2f(level_width / 4 + 1200 + 600 + 300, 900), "pipe5");
+	initObject(new RigidSurface_Pipe, sf::Vector2f(level_width / 4 + 1200 + 600 + 300, 800), "pipe6");
+
+	initObject(new RigidSurface_Pipe, sf::Vector2f(level_width / 4 + 1200 + 900 + 500, 1000), "pipe7");
+	initObject(new RigidSurface_Pipe, sf::Vector2f(level_width / 4 + 1200 + 900 + 500, 900), "pipe8");
+	initObject(new RigidSurface_Pipe, sf::Vector2f(level_width / 4 + 1200 + 900 + 500, 800), "pipe9");
+	//RigidSurface_Floor * pit = (RigidSurface_Floor *)_gameObjectManager.get("block56");
+	//delete pit;
+}
+
+void Game::createFloor()
+{
+	for (int i = 0; i < level_width / 100 + 1; i++)
+	{
+		initObject(new RigidSurface_Floor, sf::Vector2f(i * 100 + 50, 1100), "floor" + std::to_string(i));
+	}
+
+	printf("%d", _gameObjectManager.get("floor1")->getSprite().getPosition().y);
 }
 
 bool Game::isExiting()
@@ -96,14 +140,53 @@ void Game::showMenu()
 void Game::handleSurfaces()
 {
 	PlayerCharacter * player = (PlayerCharacter *)_gameObjectManager.get("PlayerCharacter");
-
 	for (int i = 0; i < rigidBodyCoords.size(); ++i)
 	{
 		if (player->getSprite().getGlobalBounds().intersects(rigidBodyCoords[i]->getSprite().getGlobalBounds()))
 		{
-			player->setPosition(player->getPosition().x, player->getPosition().y - 1);
-			player->velocity.x = -player->velocity.x;
-			player->grounded = true;
+			if (rigidBodyCoords[i]->getType() == "RigidSurface_Mystery")
+			{
+				//To:Do: fall, don't fly
+				RigidSurface_Mystery * block = (RigidSurface_Mystery *) rigidBodyCoords[i];
+				if (block->times_hit < 3)
+				{
+					player->coins++;
+					block->times_hit++;
+				}
+				else
+				{
+					//block is dead
+				}
+
+				player->velocity.x = -player->velocity.x;
+				if (player->velocity.y < 0)
+				{
+					player->velocity.y = -2* player->velocity.y;
+				}
+
+				if (player->velocity.y > 0)
+				{
+					player->setPosition(player->getPosition().x, player->getPosition().y - 1);
+					player->grounded = true;
+				}
+			}
+
+			else
+			{
+				if (player->velocity.y > 0)
+				{
+					player->setPosition(player->getPosition().x, player->getPosition().y - 1);
+					//player->velocity.x = -player->velocity.x;
+					//TO-DO: Distinguish between bumping horizontally and landing vertically on blocks.
+					//TO-DO: Make kitty stop floating
+					player->grounded = true;
+				}
+				else
+				{
+					player->velocity.x = -player->velocity.x;
+				}
+				
+			}
 		}
 	}
 }
@@ -134,7 +217,10 @@ void Game::gameLoop()
 			_gameObjectManager.drawAll(_mainWindow);
 
 			handleSurfaces();
-			
+
+			handleCamera();
+
+			_mainWindow.setView(_view);
 			_mainWindow.display();
 
 			if (currentEvent.type == sf::Event::Closed) _gameState = Game::Exiting;
@@ -156,6 +242,26 @@ void Game::gameLoop()
 sf::RenderWindow& Game::getWindow()
 {
 	return _mainWindow;
+}
+
+void Game::handleCamera()
+{
+	PlayerCharacter * player = (PlayerCharacter *)_gameObjectManager.get("PlayerCharacter");
+
+	float pos_x = player->getPosition().x + 10 - (SCREEN_WIDTH / 2);
+	float pos_y = player->getPosition().y + 10 - (SCREEN_HEIGHT / 2);
+
+	if (pos_x < 0)
+	{
+		pos_x = 0;
+	}
+
+	if (pos_y < 0)
+	{
+		pos_y = 0;
+	}
+
+	_view.reset(sf::FloatRect(pos_x, pos_y, SCREEN_WIDTH, SCREEN_HEIGHT));
 }
 
 const sf::Event& Game::GetInput()

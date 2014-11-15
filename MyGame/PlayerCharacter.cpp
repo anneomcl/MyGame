@@ -82,10 +82,10 @@ void PlayerCharacter::checkXBounds()
 		velocity.x = -velocity.x;
 	}
 
-	else if (position.x >(Game::SCREEN_WIDTH - (getSprite().getGlobalBounds().width / 2)))
+	/*else if (position.x >(Game::SCREEN_WIDTH - (getSprite().getGlobalBounds().width / 2)))
 	{
 		velocity.x = -velocity.x;
-	}
+	}*/
 }
 
 void PlayerCharacter::update(float elapsedTime)
@@ -112,7 +112,7 @@ void PlayerCharacter::update(float elapsedTime)
 
 	if (currJumpFrames > 0 && jump)
 	{
-		velocity.y -= yAcceleration;
+		velocity.y -= yAcceleration * (1.2);
 		currJumpFrames--;
 	}
 
@@ -127,5 +127,13 @@ void PlayerCharacter::update(float elapsedTime)
 		}
 	}
 
+	else if (!grounded)
+	{
+		velocity.y += gravity;
+		if (grounded)
+		{
+			velocity.y = 0;
+		}
+	}
 	getSprite().move(velocity.x * elapsedTime, velocity.y * elapsedTime);
 }

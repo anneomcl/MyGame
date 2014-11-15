@@ -22,6 +22,12 @@ public:
 
 private:
 
+	static void createLevelBlocks();
+
+	static void handleCamera();
+
+	static void createFloor();
+
 	static void handleSurfaces();
 
 	static void initObject(VisibleGameObject * object, sf::Vector2f position, std::string name);
@@ -59,4 +65,9 @@ private:
 	static GameState _gameState;
 	static sf::RenderWindow _mainWindow;
 	static GameObjectManager _gameObjectManager;
+	static sf::View _view;
+	static float level_width;
+	static float level_height;
+	static sf::Font font;
+	static sf::Text coins;
 };

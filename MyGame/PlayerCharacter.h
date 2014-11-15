@@ -25,6 +25,8 @@ public:
 
 	bool grounded;
 
+	int coins;
+
 private:
 	sf::Vector2f position;
 	const sf::Vector2f screenStartPosition;

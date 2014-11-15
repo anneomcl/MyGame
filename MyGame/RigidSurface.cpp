@@ -6,9 +6,11 @@ using namespace std;
 
 RigidSurface::RigidSurface()
 {
+	sf::FloatRect bounds = this->getSprite().getGlobalBounds();
 	load("C:/Users/Anne/Documents/Visual Studio 2013/Projects/MyGame/Graphics/RigidSurface_Block.png");
 	assert(isLoaded());
-	getSprite().setOrigin(getSprite().getGlobalBounds().width / 2, getSprite().getGlobalBounds().height / 2);
+	getSprite().setOrigin(bounds.width / 2, bounds.height / 2);
+	
 }
 
 RigidSurface::~RigidSurface()
