@@ -21,10 +21,11 @@ public:
 
 //protected:
 	sf::Sprite& getSprite();
+	std::string _filename;
 
 private:
 	sf::Sprite _sprite;
 	sf::Texture _image;
-	std::string _filename;
+	
 	bool _isLoaded;
 };

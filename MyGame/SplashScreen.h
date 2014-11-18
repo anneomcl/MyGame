@@ -9,5 +9,5 @@ class SplashScreen
 		/*
 		* Draws splashscreen image and takes player to the main menu upon any event occurring.
 		*/
-		void show(sf::RenderWindow& window);
+		void show(sf::RenderWindow& window, std::string file);
 };

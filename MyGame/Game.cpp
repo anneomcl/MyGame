@@ -6,6 +6,7 @@
 #include "RigidSurface_Floor.h"
 #include "RigidSurface_Mystery.h"
 #include "RigidSurface_Pipe.h"
+#include "RigidSurface_Brick.h"
 #include <iostream>
 
 Game::GameState Game::_gameState = Uninitialized;
@@ -17,6 +18,8 @@ float Game::level_width;
 float Game::level_height;
 sf::Font Game::font;
 sf::Text Game::coins;
+bool Game::game_victory;
+
 
 
 void Game::initObject(VisibleGameObject * object, sf::Vector2f position, std::string name)
@@ -31,6 +34,7 @@ void Game::start(void)
 	if (_gameState != Uninitialized)
 		return;
 
+	game_victory = 0;
 	_mainWindow.create(sf::VideoMode(1024, 768, 32), "Anne McLaughlin Demo");
 	_view.reset(sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
 	_view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
@@ -43,7 +47,7 @@ void Game::start(void)
 	//coins.setColor(sf::Color::Black);
 	//_mainWindow.draw(coins);
 
-	initObject(new PlayerCharacter, sf::Vector2f(SCREEN_WIDTH / 4, 1000), "PlayerCharacter");
+	initObject(new PlayerCharacter, sf::Vector2f(/*SCREEN_WIDTH / 4*/ 9*SCREEN_WIDTH/10, 1000), "PlayerCharacter");
 
 	Background * bg = new Background();
 	level_width = bg->getSprite().getGlobalBounds().width;
@@ -63,7 +67,6 @@ void Game::start(void)
 	{
 		gameLoop();
 	}
-
 	_mainWindow.close();
 }
 
@@ -72,7 +75,12 @@ void Game::createLevelBlocks()
 	initObject(new RigidSurface_Mystery, sf::Vector2f(level_width / 4 + 200, 1350 - 500), "block5");
 	for (int i = 0; i < 5; i++)
 	{
-		initObject(new RigidSurface_Mystery, sf::Vector2f(level_width / 4 + 200 + 300 + i * 100, 1350 - 500 - 100), "block" + std::to_string(i));
+		if (i%2 == 0)
+			initObject(new RigidSurface_Brick, sf::Vector2f(level_width / 4 + 200 + 300 + i * 100, 1350 - 500 - 100), "block" + std::to_string(i));
+	
+		else
+			initObject(new RigidSurface_Mystery, sf::Vector2f(level_width / 4 + 200 + 300 + i * 100, 1350 - 500 - 100), "block" + std::to_string(i));
+
 	}
 	initObject(new RigidSurface_Mystery, sf::Vector2f(level_width / 4 + 200 + 300 + 300, 1350 - 500 - 300 - 100), "block6");
 
@@ -88,15 +96,33 @@ void Game::createLevelBlocks()
 	initObject(new RigidSurface_Pipe, sf::Vector2f(level_width / 4 + 1200 + 900 + 500, 1000), "pipe7");
 	initObject(new RigidSurface_Pipe, sf::Vector2f(level_width / 4 + 1200 + 900 + 500, 900), "pipe8");
 	initObject(new RigidSurface_Pipe, sf::Vector2f(level_width / 4 + 1200 + 900 + 500, 800), "pipe9");
-	//RigidSurface_Floor * pit = (RigidSurface_Floor *)_gameObjectManager.get("block56");
-	//delete pit;
+	initObject(new RigidSurface_Mystery, sf::Vector2f(level_width / 4 + 2600 + 500, 600), "block7");
+
+	initObject(new RigidSurface_Brick, sf::Vector2f(level_width / 4 + 3100 + 1000, 700), "block8");
+	initObject(new RigidSurface_Mystery, sf::Vector2f(level_width / 4 + 3100 + 1100, 700), "block9");
+	initObject(new RigidSurface_Brick, sf::Vector2f(level_width / 4 + 3100 + 1200, 700), "block10");
+
+	initObject(new RigidSurface_Mystery, sf::Vector2f(level_width / 4 + 4400 + 1100, 700), "block11");
+	for (int i = 0; i < 12; i++)
+	{
+		if (i != 11)
+			initObject(new RigidSurface_Brick, sf::Vector2f(level_width / 4 + 4400 + i * 100, 400), "block" + std::to_string(i+11));
+
+		else
+			initObject(new RigidSurface_Mystery, sf::Vector2f(level_width / 4 + 4400 + i * 100, 400), "block" + std::to_string(i + 11));
+
+	}
+	initObject(new RigidSurface_Brick, sf::Vector2f(7950, 1000), "block_victory");
 }
 
 void Game::createFloor()
 {
 	for (int i = 0; i < level_width / 100 + 1; i++)
 	{
-		initObject(new RigidSurface_Floor, sf::Vector2f(i * 100 + 50, 1100), "floor" + std::to_string(i));
+		if (i != 56 && i != 57 && i != 66 && i != 67 && i != 68)
+		{
+			initObject(new RigidSurface_Floor, sf::Vector2f(i * 100 + 50, 1100), "floor" + std::to_string(i));
+		}
 	}
 
 	printf("%d", _gameObjectManager.get("floor1")->getSprite().getPosition().y);
@@ -110,11 +136,27 @@ bool Game::isExiting()
 		return false;
 }
 
+bool Game::isVictory()
+{
+	return game_victory;
+}
+
 void Game::showSplashScreen()
 {
 	SplashScreen splashScreen;
-	splashScreen.show(_mainWindow);
+	splashScreen.show(_mainWindow, "C:/Users/Anne/Documents/Visual Studio 2013/Projects/MyGame/Graphics/MyGameScreen.png");
 	_gameState = Game::ShowingMenu;
+}
+
+void Game::showVictoryScreen()
+{
+	std::cout << "I WIN" << std::endl;
+	SplashScreen victory;
+	while (1)
+	{
+		victory.show(_mainWindow, "C:/Users/Anne/Documents/Visual Studio 2013/Projects/MyGame/Graphics/Victory.png");
+	}
+	
 }
 
 void Game::showMenu()
@@ -140,10 +182,19 @@ void Game::showMenu()
 void Game::handleSurfaces()
 {
 	PlayerCharacter * player = (PlayerCharacter *)_gameObjectManager.get("PlayerCharacter");
+	RigidSurface_Brick * v_block = (RigidSurface_Brick *)_gameObjectManager.get("block_victory");
+
+	if (player->getSprite().getGlobalBounds().intersects(v_block->getSprite().getGlobalBounds()))
+	{
+		game_victory = 1;
+	}
+
 	for (int i = 0; i < rigidBodyCoords.size(); ++i)
 	{
 		if (player->getSprite().getGlobalBounds().intersects(rigidBodyCoords[i]->getSprite().getGlobalBounds()))
 		{
+			
+
 			if (rigidBodyCoords[i]->getType() == "RigidSurface_Mystery")
 			{
 				//To:Do: fall, don't fly
@@ -227,14 +278,21 @@ void Game::gameLoop()
 
 			if ((currentEvent.type == sf::Event::KeyPressed) && (currentEvent.key.code == sf::Keyboard::Escape))
 				showMenu();
-			if ((currentEvent.type == sf::Event::KeyPressed) && (currentEvent.key.code == sf::Keyboard::R))
-				_gameState = Game::Restart;
+
+			if(game_victory != 0)
+			{
+				_gameState = Game::ShowingSplash
+					;
+			}
+
 			break;
 		}
 
-		case Game::Restart:
+		case Game::Victory:
 		{
-			//start();
+			std::cout << _gameState << std::endl;
+			showVictoryScreen();
+			break;
 		}
 	}
 }

@@ -3,10 +3,10 @@
 #include "SFML\Graphics.hpp"
 #include <iostream>
 
-void SplashScreen::show(sf::RenderWindow & renderWindow)
+void SplashScreen::show(sf::RenderWindow & renderWindow, std::string file)
 {
 	sf::Texture image;
-	if (!image.loadFromFile("C:/Users/Anne/Documents/Visual Studio 2013/Projects/MyGame/Graphics/MyGameScreen.png"))
+	if (!image.loadFromFile(file))
 	{
 		return;
 	}

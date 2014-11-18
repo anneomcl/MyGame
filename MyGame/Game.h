@@ -54,12 +54,16 @@ private:
 	*/
 	static void showMenu();
 
+	static void showVictoryScreen();
+
+	static bool isVictory();
+
 	/*
 	* Denotes the current game state.
 	*/
 	enum GameState {
 		Uninitialized, ShowingSplash, Paused,
-		ShowingMenu, Playing, Exiting, Restart
+		ShowingMenu, Playing, Exiting, Restart, Victory
 	};
 
 	static GameState _gameState;
@@ -68,6 +72,7 @@ private:
 	static sf::View _view;
 	static float level_width;
 	static float level_height;
+	static bool game_victory;
 	static sf::Font font;
 	static sf::Text coins;
 };

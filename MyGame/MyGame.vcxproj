@@ -89,6 +89,7 @@
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="PlayerCharacter.cpp" />
     <ClCompile Include="RigidSurface.cpp" />
+    <ClCompile Include="RigidSurface_Brick.cpp" />
     <ClCompile Include="RigidSurface_Floor.cpp" />
     <ClCompile Include="RigidSurface_Mystery.cpp" />
     <ClCompile Include="RigidSurface_Pipe.cpp" />
@@ -102,6 +103,7 @@
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="PlayerCharacter.h" />
     <ClInclude Include="RigidSurface.h" />
+    <ClInclude Include="RigidSurface_Brick.h" />
     <ClInclude Include="RigidSurface_Floor.h" />
     <ClInclude Include="RigidSurface_Mystery.h" />
     <ClInclude Include="RigidSurface_Pipe.h" />
