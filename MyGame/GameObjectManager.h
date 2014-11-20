@@ -12,6 +12,7 @@ public:
 	int getObjectCount() const;
 	VisibleGameObject * get(std::string name) const;
 	std::vector<VisibleGameObject *> getByType(const char * type) const;
+	VisibleGameObject * getByTypeSingle(const char * type) const;
 
 	void drawAll(sf::RenderWindow &renderWindow);
 	void updateAll();

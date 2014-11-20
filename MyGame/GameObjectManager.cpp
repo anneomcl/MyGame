@@ -41,7 +41,6 @@ std::vector<VisibleGameObject *> GameObjectManager::getByType(const char * type)
 	std::map<std::string, VisibleGameObject *>::const_iterator it = _gameObjects.begin();
 	while (it != _gameObjects.end())
 	{
-		//if (/*strcmp(it->second->getType(),(type)) == 0*/ 
 		if (std::string (it->second->getType()).find(std::string(type)) == 0)
 		{
 			ret.push_back(it->second);
@@ -50,6 +49,24 @@ std::vector<VisibleGameObject *> GameObjectManager::getByType(const char * type)
 		it++;
 	}
 	
+	return ret;
+}
+
+VisibleGameObject * GameObjectManager::getByTypeSingle(const char * type) const
+{
+	VisibleGameObject * ret = NULL;
+
+	std::map<std::string, VisibleGameObject *>::const_iterator it = _gameObjects.begin();
+	while (it != _gameObjects.end())
+	{
+		if (std::string(it->second->getType()).find(std::string(type)) == 0)
+		{
+			ret = it->second;
+		}
+
+		it++;
+	}
+
 	return ret;
 }
 

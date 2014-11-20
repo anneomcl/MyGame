@@ -7,6 +7,7 @@
 #include "RigidSurface_Mystery.h"
 #include "RigidSurface_Pipe.h"
 #include "RigidSurface_Brick.h"
+#include "Coin.h"
 #include <iostream>
 
 Game::GameState Game::_gameState = Uninitialized;
@@ -19,6 +20,8 @@ float Game::level_height;
 sf::Font Game::font;
 sf::Text Game::coins;
 bool Game::game_victory;
+int Game::coin_animation_frames = 150;
+bool Game::display_coin = false;
 
 
 
@@ -150,13 +153,9 @@ void Game::showSplashScreen()
 
 void Game::showVictoryScreen()
 {
-	std::cout << "I WIN" << std::endl;
-	SplashScreen victory;
-	while (1)
-	{
-		victory.show(_mainWindow, "C:/Users/Anne/Documents/Visual Studio 2013/Projects/MyGame/Graphics/Victory.png");
-	}
-	
+	/*SplashScreen victory;
+	victory.show(_mainWindow, "C:/Users/Anne/Documents/Visual Studio 2013/Projects/MyGame/Graphics/Victory.png");*/
+	_gameState = Game::Exiting;
 }
 
 void Game::showMenu()
@@ -189,18 +188,33 @@ void Game::handleSurfaces()
 		game_victory = 1;
 	}
 
+	if (display_coin)
+	{
+		coin_animation_frames--;
+		if (coin_animation_frames <= 0)
+		{
+			display_coin = false;
+			Coin * coin = (Coin *) _gameObjectManager.getByTypeSingle("Coin");
+			printf(coin->getType());
+			coin->isVisible = false;
+			coin_animation_frames = 150;
+		}
+	}
+
 	for (int i = 0; i < rigidBodyCoords.size(); ++i)
 	{
 		if (player->getSprite().getGlobalBounds().intersects(rigidBodyCoords[i]->getSprite().getGlobalBounds()))
 		{
-			
-
 			if (rigidBodyCoords[i]->getType() == "RigidSurface_Mystery")
 			{
-				//To:Do: fall, don't fly
 				RigidSurface_Mystery * block = (RigidSurface_Mystery *) rigidBodyCoords[i];
 				if (block->times_hit < 3)
 				{
+					display_coin = true;
+					Coin * new_coin = new Coin();
+					initObject(new_coin,
+						sf::Vector2f(rigidBodyCoords[i]->getSprite().getGlobalBounds().left, rigidBodyCoords[i]->getSprite().getGlobalBounds().top - 100)
+						, "coin" + std::to_string(player->coins));
 					player->coins++;
 					block->times_hit++;
 				}
@@ -281,8 +295,7 @@ void Game::gameLoop()
 
 			if(game_victory != 0)
 			{
-				_gameState = Game::ShowingSplash
-					;
+				_gameState = Game::Victory;
 			}
 
 			break;

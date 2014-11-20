@@ -75,4 +75,6 @@ private:
 	static bool game_victory;
 	static sf::Font font;
 	static sf::Text coins;
+	static int coin_animation_frames;
+	static bool display_coin;
 };
