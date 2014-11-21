@@ -73,8 +73,8 @@ private:
 	static float level_width;
 	static float level_height;
 	static bool game_victory;
-	static sf::Font font;
-	static sf::Text coins;
+	static sf::Font * font;
+	static sf::Text * coinstring;
 	static int coin_animation_frames;
 	static bool display_coin;
 };

@@ -17,8 +17,8 @@ GameObjectManager Game::_gameObjectManager;
 sf::View Game::_view;
 float Game::level_width;
 float Game::level_height;
-sf::Font Game::font;
-sf::Text Game::coins;
+sf::Font * Game::font = new sf::Font();
+sf::Text * Game::coinstring = new sf::Text();
 bool Game::game_victory;
 int Game::coin_animation_frames = 150;
 bool Game::display_coin = false;
@@ -41,14 +41,21 @@ void Game::start(void)
 	_mainWindow.create(sf::VideoMode(1024, 768, 32), "Anne McLaughlin Demo");
 	_view.reset(sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
 	_view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
-	//font.loadFromFile("C:/Users/Anne/Documents/Visual Studio 2013/Projects/MyGame/Graphics/gameFont.ttf");
+	if (!font->loadFromFile("C:/Users/Anne/Documents/Visual Studio 2013/Projects/MyGame/Graphics/AGENTORANGE.TTF"))
+	{
+		std::cout << "error" << std::endl;
+	}
 
+	coinstring->setFont(*Game::font);
+	coinstring->setString("Coins: ");
+	coinstring->setCharacterSize(72);
+	coinstring->setColor(sf::Color::Black);
+	coinstring->setStyle(sf::Text::Regular);
+	
+	sf::FloatRect textRect = coinstring->getLocalBounds();
 
-	//coins.setFont(Game::font);
-	//coins.setString("Coins: ");
-	//coins.setCharacterSize(24);
-	//coins.setColor(sf::Color::Black);
-	//_mainWindow.draw(coins);
+	coinstring->setOrigin(textRect.width / 2, textRect.height / 2);
+	coinstring->setPosition(sf::Vector2f(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f));
 
 	initObject(new PlayerCharacter, sf::Vector2f(/*SCREEN_WIDTH / 4*/ 9*SCREEN_WIDTH/10, 1000), "PlayerCharacter");
 
@@ -279,6 +286,7 @@ void Game::gameLoop()
 		{
 			rigidBodyCoords = findRigidBodies();
 			_gameObjectManager.updateAll();
+			_mainWindow.draw(*coinstring);
 			_gameObjectManager.drawAll(_mainWindow);
 
 			handleSurfaces();
@@ -286,7 +294,9 @@ void Game::gameLoop()
 			handleCamera();
 
 			_mainWindow.setView(_view);
+
 			_mainWindow.display();
+
 
 			if (currentEvent.type == sf::Event::Closed) _gameState = Game::Exiting;
 
