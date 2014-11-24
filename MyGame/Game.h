@@ -3,6 +3,7 @@
 #include "SFML/Graphics.hpp"
 #include "PlayerCharacter.h"
 #include "GameObjectManager.h"
+#include "RigidSurface_Mystery.h"
 
 
 class Game
@@ -13,12 +14,15 @@ public:
 	* Starts the game.
 	*/
 	static void start();
+	static void start_victory();
+	static void reset_mystery_blocks();
 	static sf::RenderWindow& getWindow();
 	const static sf::Event& GetInput();
 	const static int SCREEN_WIDTH = 1024;
 	const static int SCREEN_HEIGHT = 768;
 
 	static std::vector<VisibleGameObject *> rigidBodyCoords;
+	static std::vector<RigidSurface_Mystery *> mystery_blocks;
 
 private:
 
@@ -47,7 +51,7 @@ private:
 	/*
 	* Shows the splash screen on the main window.
 	*/
-	static void showSplashScreen();
+	static void showSplashScreen(std::string file);
 
 	/*
 	* Shows the main menu on the main window. Changes _gameState based on button pressed.
@@ -62,7 +66,7 @@ private:
 	* Denotes the current game state.
 	*/
 	enum GameState {
-		Uninitialized, ShowingSplash, Paused,
+		Uninitialized, ShowingSplash, ShowingSplashVictory, Paused,
 		ShowingMenu, Playing, Exiting, Restart, Victory
 	};
 

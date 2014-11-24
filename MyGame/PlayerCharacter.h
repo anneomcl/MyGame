@@ -27,6 +27,8 @@ public:
 
 	int coins;
 
+	int lives;
+
 private:
 	sf::Vector2f position;
 	const sf::Vector2f screenStartPosition;

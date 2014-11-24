@@ -21,7 +21,8 @@ xAcceleration(1.0f),
 yAcceleration(3.0f),
 jump(0),
 grounded(1),
-coins(0)
+coins(0),
+lives(0)
 {
 	maxJumpFrames = 250;
 	currJumpFrames = maxJumpFrames;

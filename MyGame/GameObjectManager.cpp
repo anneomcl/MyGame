@@ -1,4 +1,5 @@
 #include "GameObjectManager.h"
+#include "RigidSurface_Mystery.h"
 #include "Game.h"
 
 GameObjectManager::GameObjectManager()
