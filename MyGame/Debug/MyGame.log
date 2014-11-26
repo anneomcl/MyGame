@@ -1,16 +1,16 @@
-﻿Build started 11/24/2014 5:14:51 PM.
+﻿Build started 11/26/2014 4:36:59 PM.
      1>Project "C:\Users\Anne\Documents\Visual Studio 2013\Projects\MyGame\MyGame\MyGame.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Program Files (x86)\SFML-2.1\include" /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Game.cpp
          Game.cpp
-     1>c:\users\anne\documents\visual studio 2013\projects\mygame\mygame\game.cpp(46): warning C4244: 'argument' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\anne\documents\visual studio 2013\projects\mygame\mygame\game.cpp(81): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\anne\documents\visual studio 2013\projects\mygame\mygame\game.cpp(87): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\anne\documents\visual studio 2013\projects\mygame\mygame\game.cpp(100): warning C4244: 'argument' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\anne\documents\visual studio 2013\projects\mygame\mygame\game.cpp(192): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\anne\documents\visual studio 2013\projects\mygame\mygame\game.cpp(269): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\anne\documents\visual studio 2013\projects\mygame\mygame\game.cpp(415): warning C4244: 'argument' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\anne\documents\visual studio 2013\projects\mygame\mygame\game.cpp(422): warning C4172: returning address of local variable or temporary
+     1>c:\users\anne\documents\visual studio 2013\projects\mygame\mygame\game.cpp(52): warning C4244: 'argument' : conversion from 'const int' to 'float', possible loss of data
+     1>c:\users\anne\documents\visual studio 2013\projects\mygame\mygame\game.cpp(81): warning C4244: 'argument' : conversion from 'const int' to 'float', possible loss of data
+     1>c:\users\anne\documents\visual studio 2013\projects\mygame\mygame\game.cpp(116): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\anne\documents\visual studio 2013\projects\mygame\mygame\game.cpp(129): warning C4244: 'argument' : conversion from 'const int' to 'float', possible loss of data
+     1>c:\users\anne\documents\visual studio 2013\projects\mygame\mygame\game.cpp(221): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\anne\documents\visual studio 2013\projects\mygame\mygame\game.cpp(298): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\anne\documents\visual studio 2013\projects\mygame\mygame\game.cpp(476): warning C4244: 'argument' : conversion from 'const int' to 'float', possible loss of data
+     1>c:\users\anne\documents\visual studio 2013\projects\mygame\mygame\game.cpp(483): warning C4172: returning address of local variable or temporary
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Anne\Documents\Visual Studio 2013\Projects\MyGame\Debug\MyGame.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Program Files (x86)\SFML-2.1\lib" "sfml-system-d.lib" "sfml-main-d.lib" "sfml-graphics-d.lib" "sfml-audio-d.lib" "sfml-network-d.lib" "sfml-window-d.lib" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Anne\Documents\Visual Studio 2013\Projects\MyGame\Debug\MyGame.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Anne\Documents\Visual Studio 2013\Projects\MyGame\Debug\MyGame.lib" /MACHINE:X86 Debug\Background.obj
          Debug\Coin.obj
@@ -31,4 +31,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.98
+Time Elapsed 00:00:02.15

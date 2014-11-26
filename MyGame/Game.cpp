@@ -35,6 +35,41 @@ void Game::initObject(VisibleGameObject * object, sf::Vector2f position, std::st
 	}
 }
 
+void Game::start_again()
+{
+	PlayerCharacter * player = (PlayerCharacter *)_gameObjectManager.getByTypeSingle("PlayerCharacter");
+	player->setPosition(500, 1000);
+	player->grounded = true;
+}
+
+void Game::start_loss()
+{
+	if (_gameState != Uninitialized)
+		return;
+
+	game_victory = 0;
+	_mainWindow.create(sf::VideoMode(1024, 768, 32), "Anne McLaughlin Demo");
+	_view.reset(sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
+	_view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
+
+	PlayerCharacter * player = (PlayerCharacter *)_gameObjectManager.getByTypeSingle("PlayerCharacter");
+	player->setPosition(500, 1000);
+	player->coins = 0;
+	player->lives = 0;
+	player->grounded = true;
+
+
+	reset_mystery_blocks();
+
+
+	_gameState = Game::ShowingSplashLoss;
+
+	while (!isExiting())
+	{
+		gameLoop();
+	}
+	_mainWindow.close();
+}
 
 void Game::start_victory(void)
 {
@@ -186,8 +221,6 @@ void Game::createFloor()
 			initObject(new RigidSurface_Floor, sf::Vector2f(i * 100 + 50, 1100), "floor" + std::to_string(i));
 		}
 	}
-
-	printf("%d", _gameObjectManager.get("floor1")->getSprite().getPosition().y);
 }
 
 bool Game::isExiting()
@@ -254,7 +287,6 @@ void Game::handleSurfaces()
 		{
 			display_coin = false;
 			Coin * coin = (Coin *) _gameObjectManager.getByTypeSingle("Coin");
-			printf(coin->getType());
 			coin->isVisible = false;
 			coin_animation_frames = 150;
 		}
@@ -346,12 +378,37 @@ void Game::gameLoop()
 			break;
 		}
 
+		case Game::ShowingSplashLoss:
+		{
+			showSplashScreen("C:/Users/Anne/Documents/Visual Studio 2013/Projects/MyGame/Graphics/Loss.png");
+			break;
+		}
+
 		case Game::Playing:
 		{
 			rigidBodyCoords = findRigidBodies();
 			_gameObjectManager.updateAll();
 			//_mainWindow.draw(*coinstring);
 			_gameObjectManager.drawAll(_mainWindow);
+
+
+			PlayerCharacter * player = (PlayerCharacter *)_gameObjectManager.get("PlayerCharacter");
+
+			if (player->getPosition().y > 2000)
+			{
+				if (player->lives > 0)
+				{
+					player->lives--;
+					start_again();
+				}
+
+				else
+				{
+					_gameState = Loss;
+					start_loss();
+					break;
+				}
+			}
 
 			handleSurfaces();
 
@@ -379,6 +436,13 @@ void Game::gameLoop()
 		{
 			_gameState = Game::Uninitialized;
 			start_victory();
+			break;
+		}
+
+		case Game::Loss:
+		{
+			_gameState = Game::Uninitialized;
+			start_loss();
 			break;
 		}
 	}

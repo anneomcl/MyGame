@@ -62,12 +62,16 @@ private:
 
 	static bool isVictory();
 
+	static void start_loss();
+
+	static void start_again();
+
 	/*
 	* Denotes the current game state.
 	*/
 	enum GameState {
-		Uninitialized, ShowingSplash, ShowingSplashVictory, Paused,
-		ShowingMenu, Playing, Exiting, Restart, Victory
+		Uninitialized, ShowingSplash, ShowingSplashVictory, ShowingSplashLoss, Paused,
+		ShowingMenu, Playing, Exiting, Restart, Victory, Loss
 	};
 
 	static GameState _gameState;
