@@ -7,7 +7,6 @@
 Background::Background()
 {
 	load("C:/Users/Anne/Documents/Visual Studio 2013/Projects/MyGame/Graphics/Background_condensed.png");
-	assert(isLoaded());
 }
 
 Background::~Background()

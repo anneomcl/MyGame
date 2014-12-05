@@ -15,17 +15,17 @@ public:
 
 	virtual void setPosition(float x, float y);
 	virtual sf::Vector2f getPosition() const;
-	virtual bool isLoaded() const;
+	virtual bool getIsLoaded() const;
 
 	virtual char * getType();
 
-//protected:
+	//protected:
 	sf::Sprite& getSprite();
-	std::string _filename;
+	std::string filename;
 
 private:
-	sf::Sprite _sprite;
-	sf::Texture _image;
-	
-	bool _isLoaded;
+	sf::Sprite sprite;
+	sf::Texture image;
+
+	bool isLoaded;
 };

@@ -5,7 +5,7 @@
 #include <iostream>
 
 VisibleGameObject::VisibleGameObject()
-	: _isLoaded(false)
+	: isLoaded(false)
 {
 
 }
@@ -22,27 +22,27 @@ char * VisibleGameObject::getType()
 
 void VisibleGameObject::load(std::string filename)
 {
-	if (!_image.loadFromFile(filename))
+	if (!image.loadFromFile(filename))
 	{
-		
-		_filename = "";
-		_isLoaded = false;
+
+		filename = "";
+		isLoaded = false;
 		return;
 	}
 
 	else
 	{
-		_filename = _filename;
-		_sprite.setTexture(_image);
-		_isLoaded = true;
+		filename = filename;
+		sprite.setTexture(image);
+		isLoaded = true;
 	}
 }
 
 void VisibleGameObject::draw(sf::RenderWindow &renderWindow)
 {
-	if (_isLoaded)
+	if (isLoaded)
 	{
-		renderWindow.draw(_sprite);
+		renderWindow.draw(sprite);
 	}
 }
 
@@ -53,17 +53,17 @@ void VisibleGameObject::update(float elapsedTime)
 
 void VisibleGameObject::setPosition(float x, float y)
 {
-	if (_isLoaded)
+	if (isLoaded)
 	{
-		_sprite.setPosition(x, y);
+		sprite.setPosition(x, y);
 	}
 }
 
 sf::Vector2f VisibleGameObject::getPosition() const
 {
-	if (_isLoaded)
+	if (isLoaded)
 	{
-		return _sprite.getPosition();
+		return sprite.getPosition();
 	}
 
 	return sf::Vector2f();
@@ -71,10 +71,10 @@ sf::Vector2f VisibleGameObject::getPosition() const
 
 sf::Sprite& VisibleGameObject::getSprite()
 {
-	return _sprite;
+	return sprite;
 }
 
-bool VisibleGameObject::isLoaded() const
+bool VisibleGameObject::getIsLoaded() const
 {
-	return _isLoaded;
+	return isLoaded;
 }
